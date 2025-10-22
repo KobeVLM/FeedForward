@@ -47,8 +47,14 @@ public class DepartmentService {
     // It fetches the department by ID, modifies its fields, and saves it back to
     // the database.
     public DepartmentEntity updateDepartment(Long id, DepartmentEntity departmentDetails) {
-        DepartmentEntity department = departmentRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Department " + id + " not found"));
+        // Beginner-friendly version: check Optional explicitly and assign to a variable
+        DepartmentEntity department;
+        Optional<DepartmentEntity> optionalDept = departmentRepository.findById(id);
+        if (optionalDept.isPresent()) {
+            department = optionalDept.get();
+        } else {
+            throw new NoSuchElementException("Department " + id + " not found");
+        }
         department.setName(departmentDetails.getName());
         department.setDescription(departmentDetails.getDescription());
         return departmentRepository.save(department);
