@@ -24,5 +24,6 @@ hs_err_pid*
 replay_pid*
 
 # Draw.io
+*.drawio
 *.drawio.png
 *.drawio.svg
