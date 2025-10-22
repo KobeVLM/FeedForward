@@ -15,17 +15,24 @@ public class DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    // CREATE a new department
+    // CREATE: Add a new department
+    // This method saves a new department to the database.
+    // It uses the departmentRepository to persist the department entity.
     public DepartmentEntity createDepartment(DepartmentEntity department) {
         return departmentRepository.save(department);
     }
 
-    // READ all departments
+    // READ: Fetch all departments
+    // This method retrieves all departments from the database.
+    // It uses the departmentRepository to fetch the list of departments.
     public List<DepartmentEntity> getAllDepartments() {
         return departmentRepository.findAll();
     }
 
-    // GET a department by ID
+    // READ: Fetch a department by its ID
+    // This method retrieves a department from the database using its ID.
+    // It uses the departmentRepository to find the department and returns it.
+    // If the department is not found, it throws a NoSuchElementException.
     public DepartmentEntity getDepartmentById(Long id) {
         Optional<DepartmentEntity> department = departmentRepository.findById(id);
         if (department.isPresent()) {
@@ -35,29 +42,28 @@ public class DepartmentService {
         }
     }
 
-    // UPDATE a department
+    // UPDATE: Modify an existing department
+    // This method updates the details of an existing department.
+    // It fetches the department by ID, modifies its fields, and saves it back to
+    // the database.
     public DepartmentEntity updateDepartment(Long id, DepartmentEntity departmentDetails) {
-        DepartmentEntity department = new DepartmentEntity();
-        try {
-            // Search for the department by ID
-            department = departmentRepository.findById(id).get();
-            department.setName(departmentDetails.getName());
-            department.setDescription(departmentDetails.getDescription());
-            return departmentRepository.save(department);
-        } catch (NoSuchElementException ex) {
-            throw new NoSuchElementException("Department " + id + " not found");
-        }
+        DepartmentEntity department = departmentRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Department " + id + " not found"));
+        department.setName(departmentDetails.getName());
+        department.setDescription(departmentDetails.getDescription());
+        return departmentRepository.save(department);
     }
 
-    // DELETE a department
+    // DELETE: Remove a department
+    // This method deletes a department from the database using its ID.
+    // It checks if the department exists and deletes it, returning a confirmation
+    // message.
     public String deleteDepartment(Long id) {
-        String msg = "";
         if (departmentRepository.findById(id).isPresent()) {
             departmentRepository.deleteById(id);
-            msg = "Department " + id + " is successfully deleted!";
+            return "Department " + id + " is successfully deleted!";
         } else {
-            msg = "Department " + id + " does not exist.";
+            return "Department " + id + " does not exist.";
         }
-        return msg;
     }
 }

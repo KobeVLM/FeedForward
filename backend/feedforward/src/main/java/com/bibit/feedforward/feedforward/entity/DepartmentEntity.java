@@ -5,17 +5,21 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "department")
 public class DepartmentEntity {
+    // Primary key for the department table
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "department_id")
     private Long departmentId;
 
+    // Name of the department
     @Column(name = "name")
     private String name;
 
+    // Description of the department
     @Column(name = "description")
     private String description;
 
+    // Constructors
     public DepartmentEntity() {
     }
 
