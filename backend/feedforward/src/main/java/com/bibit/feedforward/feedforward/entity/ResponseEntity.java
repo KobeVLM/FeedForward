@@ -24,4 +24,43 @@ public class ResponseEntity {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     // Getters and setters
+    public UUID getResponseId() {
+        return responseId;
+    }
+
+    public void setResponseId(UUID responseId) {
+        this.responseId = responseId;
+    }
+
+    public FeedbackEntity getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(FeedbackEntity feedback) {
+        this.feedback = feedback;
+    }
+
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
