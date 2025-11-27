@@ -1,4 +1,4 @@
-package com.bibit.feedforward.feedforward.entity;
+package com.bibit.appdevg6.entity;
 
 import jakarta.persistence.*;
 

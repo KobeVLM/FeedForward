@@ -1,4 +1,4 @@
-package com.bibit.feedforward.feedforward;
+package com.bibit.appdevg6;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

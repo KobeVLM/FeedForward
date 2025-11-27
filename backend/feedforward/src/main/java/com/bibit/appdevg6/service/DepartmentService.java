@@ -1,7 +1,7 @@
-package com.bibit.feedforward.feedforward.service;
+package com.bibit.appdevg6.service;
 
-import com.bibit.feedforward.feedforward.entity.DepartmentEntity;
-import com.bibit.feedforward.feedforward.repository.DepartmentRepository;
+import com.bibit.appdevg6.entity.DepartmentEntity;
+import com.bibit.appdevg6.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

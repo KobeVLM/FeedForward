@@ -1,6 +1,6 @@
-package com.bibit.feedforward.feedforward.repository;
+package com.bibit.appdevg6.repository;
 
-import com.bibit.feedforward.feedforward.entity.DepartmentEntity;
+import com.bibit.appdevg6.entity.DepartmentEntity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

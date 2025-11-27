@@ -1,7 +1,7 @@
-package com.bibit.feedforward.feedforward.controller;
+package com.bibit.appdevg6.controller;
 
-import com.bibit.feedforward.feedforward.entity.DepartmentEntity;
-import com.bibit.feedforward.feedforward.service.DepartmentService;
+import com.bibit.appdevg6.entity.DepartmentEntity;
+import com.bibit.appdevg6.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
