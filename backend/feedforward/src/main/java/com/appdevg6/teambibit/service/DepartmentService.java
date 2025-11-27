@@ -1,7 +1,7 @@
-package com.bibit.appdevg6.service;
+package com.appdevg6.teambibit.service;
 
-import com.bibit.appdevg6.entity.DepartmentEntity;
-import com.bibit.appdevg6.repository.DepartmentRepository;
+import com.appdevg6.teambibit.entity.DepartmentEntity;
+import com.appdevg6.teambibit.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

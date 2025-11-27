@@ -1,7 +1,7 @@
-package com.bibit.appdevg6.controller;
+package com.appdevg6.teambibit.controller;
 
-import com.bibit.appdevg6.entity.DepartmentEntity;
-import com.bibit.appdevg6.service.DepartmentService;
+import com.appdevg6.teambibit.entity.DepartmentEntity;
+import com.appdevg6.teambibit.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
