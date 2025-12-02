@@ -2,7 +2,12 @@ package com.bibit.feedforward.feedforward.entity;
 
 import jakarta.persistence.*;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 @Table(name = "department")
 public class DepartmentEntity {
     @Id
@@ -22,32 +27,6 @@ public class DepartmentEntity {
     public DepartmentEntity(String name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    // Setter
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    // Getter
-    public Long getDepartmentId() {
-        return departmentId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
 }
