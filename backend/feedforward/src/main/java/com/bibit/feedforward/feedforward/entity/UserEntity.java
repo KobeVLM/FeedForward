@@ -5,13 +5,17 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "user")
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity {
 
     @Id
@@ -19,37 +23,28 @@ public class UserEntity {
     @Column(name = "user_id", updatable = false, nullable = false)
     private UUID userId;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "university_email", nullable = false, unique = true)
+    private String universityEmail;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "display_name", nullable = false)
+    private String displayName;
 
-    @Column(name = "role_id", nullable = false)
-    private Long roleId;
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private RoleEntity role;
 
-    @Column(name = "department_id")
-    private Long departmentId;
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private DepartmentEntity department;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    public UserEntity() {
-    }
-
-    public UserEntity(String name, String email, String password, Long roleId, Long departmentId) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.roleId = roleId;
-        this.departmentId = departmentId;
-    }
 
     @PrePersist
     public void prePersist() {
