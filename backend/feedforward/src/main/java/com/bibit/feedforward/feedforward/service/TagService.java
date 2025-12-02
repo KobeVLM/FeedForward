@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class TagService {
@@ -27,37 +26,25 @@ public class TagService {
 
     // GET a tag by ID
     public TagEntity getTagById(Long id) {
-        Optional<TagEntity> tag = tagRepository.findById(id);
-        if (tag.isPresent()) {
-            return tag.get();
-        } else {
-            throw new NoSuchElementException("Tag " + id + " not found");
-        }
+        return tagRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Tag " + id + " not found"));
     }
 
     // UPDATE a tag
     public TagEntity updateTag(Long id, TagEntity tagDetails) {
-        TagEntity tag = new TagEntity();
-        try {
-            // Search for the tag by ID
-            tag = tagRepository.findById(id).get();
-            tag.setName(tagDetails.getName());
-            tag.setDescription(tagDetails.getDescription());
-            return tagRepository.save(tag);
-        } catch (NoSuchElementException ex) {
-            throw new NoSuchElementException("Tag " + id + " not found");
-        }
+        TagEntity tag = getTagById(id);
+        tag.setName(tagDetails.getName());
+        tag.setDescription(tagDetails.getDescription());
+        return tagRepository.save(tag);
     }
 
     // DELETE a tag
     public String deleteTag(Long id) {
-        String msg = "";
-        if (tagRepository.findById(id).isPresent()) {
+        if (tagRepository.existsById(id)) {
             tagRepository.deleteById(id);
-            msg = "Tag " + id + " is successfully deleted!";
+            return "Tag " + id + " is successfully deleted!";
         } else {
-            msg = "Tag " + id + " does not exist.";
+            return "Tag " + id + " does not exist.";
         }
-        return msg;
     }
 }

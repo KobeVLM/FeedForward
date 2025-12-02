@@ -1,21 +1,57 @@
 package com.bibit.feedforward.feedforward.service;
 
 import com.bibit.feedforward.feedforward.entity.FeedbackEntity;
+import com.bibit.feedforward.feedforward.repository.FeedbackRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
-public interface FeedbackService {
+@Service
+public class FeedbackService {
 
-    FeedbackEntity submitFeedback(FeedbackEntity feedback);
+    @Autowired
+    private FeedbackRepository feedbackRepository;
 
-    FeedbackEntity editFeedback(UUID id, FeedbackEntity feedback);
+    public FeedbackEntity submitFeedback(FeedbackEntity feedback) {
+        return feedbackRepository.save(feedback);
+    }
 
-    String deleteFeedback(UUID id);
+    public FeedbackEntity editFeedback(UUID id, FeedbackEntity feedbackDetails) {
+        FeedbackEntity feedback = getFeedbackById(id);
 
-    List<FeedbackEntity> getAllFeedback();
+        feedback.setTitle(feedbackDetails.getTitle());
+        feedback.setDescription(feedbackDetails.getDescription());
+        feedback.setCategory(feedbackDetails.getCategory());
+        feedback.setPriority(feedbackDetails.getPriority());
+        feedback.setTags(feedbackDetails.getTags());
 
-    FeedbackEntity getFeedbackById(UUID id);
+        return feedbackRepository.save(feedback);
+    }
 
-    FeedbackEntity updateStatus(UUID id, FeedbackEntity.Status status);
+    public String deleteFeedback(UUID id) {
+        if (feedbackRepository.existsById(id)) {
+            feedbackRepository.deleteById(id);
+            return "Feedback " + id + " is successfully deleted!";
+        } else {
+            return "Feedback " + id + " does not exist.";
+        }
+    }
+
+    public List<FeedbackEntity> getAllFeedback() {
+        return feedbackRepository.findAll();
+    }
+
+    public FeedbackEntity getFeedbackById(UUID id) {
+        return feedbackRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Feedback " + id + " not found"));
+    }
+
+    public FeedbackEntity updateStatus(UUID id, FeedbackEntity.Status status) {
+        FeedbackEntity feedback = getFeedbackById(id);
+        feedback.setStatus(status);
+        return feedbackRepository.save(feedback);
+    }
 }

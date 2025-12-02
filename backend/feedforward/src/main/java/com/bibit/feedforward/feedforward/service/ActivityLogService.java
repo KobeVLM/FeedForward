@@ -18,7 +18,7 @@ public class ActivityLogService {
     public void logActivity(UserEntity user, String actionType, String details) {
         ActivityLogEntity log = new ActivityLogEntity();
         log.setUser(user);
-        log.setActionType(actionType);
+        log.setAction(actionType);
         log.setDetails(details);
         activityLogRepository.save(log);
     }

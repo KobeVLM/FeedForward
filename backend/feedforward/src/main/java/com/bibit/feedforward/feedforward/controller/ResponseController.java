@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/responses")
+@RequestMapping("/api/responses")
 public class ResponseController {
 
     private final ResponseService responseService;

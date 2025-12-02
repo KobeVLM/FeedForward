@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,40 +27,30 @@ public class AttachmentService {
 
     // GET an attachment by ID
     public AttachmentEntity getAttachmentById(UUID id) {
-        Optional<AttachmentEntity> attachment = attachmentRepository.findById(id);
-        if (attachment.isPresent()) {
-            return attachment.get();
-        } else {
-            throw new NoSuchElementException("Attachment " + id + " not found");
-        }
+        return attachmentRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Attachment " + id + " not found"));
     }
 
     // UPDATE an attachment
     public AttachmentEntity updateAttachment(UUID id, AttachmentEntity attachmentDetails) {
-        AttachmentEntity attachment = new AttachmentEntity();
-        try {
-            // Search for the attachment by ID
-            attachment = attachmentRepository.findById(id).get();
-            attachment.setFilePath(attachmentDetails.getFilePath());
-            attachment.setFileName(attachmentDetails.getFileName());
-            attachment.setContentType(attachmentDetails.getContentType());
-            attachment.setFeedback(attachmentDetails.getFeedback());
-            attachment.setUploadedBy(attachmentDetails.getUploadedBy());
-            return attachmentRepository.save(attachment);
-        } catch (NoSuchElementException ex) {
-            throw new NoSuchElementException("Attachment " + id + " not found");
-        }
+        AttachmentEntity attachment = getAttachmentById(id);
+
+        attachment.setFileUrl(attachmentDetails.getFileUrl());
+        attachment.setFileName(attachmentDetails.getFileName());
+        attachment.setFileType(attachmentDetails.getFileType());
+        attachment.setFeedback(attachmentDetails.getFeedback());
+        attachment.setUploadedBy(attachmentDetails.getUploadedBy());
+
+        return attachmentRepository.save(attachment);
     }
 
     // DELETE an attachment
     public String deleteAttachment(UUID id) {
-        String msg = "";
-        if (attachmentRepository.findById(id).isPresent()) {
+        if (attachmentRepository.existsById(id)) {
             attachmentRepository.deleteById(id);
-            msg = "Attachment " + id + " is successfully deleted!";
+            return "Attachment " + id + " is successfully deleted!";
         } else {
-            msg = "Attachment " + id + " does not exist.";
+            return "Attachment " + id + " does not exist.";
         }
-        return msg;
     }
 }

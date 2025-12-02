@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/feedback")
+@RequestMapping("/api/feedback")
 public class FeedbackController {
 
     private final FeedbackService feedbackService;

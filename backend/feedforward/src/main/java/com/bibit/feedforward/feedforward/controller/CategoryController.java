@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/categories")
+@RequestMapping("/api/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -33,7 +33,7 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     public CategoryEntity editCategory(@PathVariable Long id,
-                                       @RequestBody CategoryEntity category) {
+            @RequestBody CategoryEntity category) {
         return categoryService.editCategory(id, category);
     }
 

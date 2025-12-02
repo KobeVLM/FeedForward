@@ -1,19 +1,45 @@
 package com.bibit.feedforward.feedforward.service;
 
 import com.bibit.feedforward.feedforward.entity.ResponseEntity;
+import com.bibit.feedforward.feedforward.repository.ResponseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
-public interface ResponseService {
+@Service
+public class ResponseService {
 
-    ResponseEntity writeResponse(ResponseEntity response);
+    @Autowired
+    private ResponseRepository responseRepository;
 
-    ResponseEntity editResponse(UUID id, ResponseEntity response);
+    public ResponseEntity writeResponse(ResponseEntity response) {
+        return responseRepository.save(response);
+    }
 
-    List<ResponseEntity> getResponsesByFeedback(UUID feedbackId);
+    public ResponseEntity editResponse(UUID id, ResponseEntity responseDetails) {
+        ResponseEntity response = getResponseById(id);
+        response.setBody(responseDetails.getBody());
+        return responseRepository.save(response);
+    }
 
-    ResponseEntity getResponseById(UUID id);
+    public List<ResponseEntity> getResponsesByFeedback(UUID feedbackId) {
+        return responseRepository.findByFeedback_FeedbackId(feedbackId);
+    }
 
-    String deleteResponse(UUID id);
+    public ResponseEntity getResponseById(UUID id) {
+        return responseRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Response " + id + " not found"));
+    }
+
+    public String deleteResponse(UUID id) {
+        if (responseRepository.existsById(id)) {
+            responseRepository.deleteById(id);
+            return "Response " + id + " is successfully deleted!";
+        } else {
+            return "Response " + id + " does not exist.";
+        }
+    }
 }
