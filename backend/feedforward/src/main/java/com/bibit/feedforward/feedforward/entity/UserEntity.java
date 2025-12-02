@@ -32,6 +32,9 @@ public class UserEntity {
     @Column(name = "display_name", nullable = false)
     private String displayName;
 
+    @Column(name = "avatar_url")
+    private String avatarUrl;
+
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity role;

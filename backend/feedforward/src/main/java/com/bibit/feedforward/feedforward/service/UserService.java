@@ -29,11 +29,11 @@ public class UserService {
 
     public UserEntity updateUser(UUID id, UserEntity userDetails) {
         UserEntity user = getUserById(id);
-        user.setName(userDetails.getName());
-        user.setEmail(userDetails.getEmail());
-        user.setPassword(userDetails.getPassword());
-        user.setRoleId(userDetails.getRoleId());
-        user.setDepartmentId(userDetails.getDepartmentId());
+        user.setDisplayName(userDetails.getDisplayName());
+        user.setUniversityEmail(userDetails.getUniversityEmail());
+        user.setPasswordHash(userDetails.getPasswordHash());
+        user.setRole(userDetails.getRole());
+        user.setDepartment(userDetails.getDepartment());
         return userRepository.save(user);
     }
 

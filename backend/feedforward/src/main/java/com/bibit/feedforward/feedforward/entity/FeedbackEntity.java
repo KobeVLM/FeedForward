@@ -3,6 +3,7 @@ package com.bibit.feedforward.feedforward.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,13 +30,16 @@ public class FeedbackEntity {
     @Enumerated(EnumType.STRING)
     private Status status = Status.PENDING;
 
+    @Enumerated(EnumType.STRING)
+    private Priority priority = Priority.MEDIUM;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
-    @ManyToOne
-    @JoinColumn(name = "tag_id")
-    private TagEntity tag;
+    @ManyToMany
+    @JoinTable(name = "feedback_tags", joinColumns = @JoinColumn(name = "feedback_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<TagEntity> tags;
 
     @ManyToOne
     @JoinColumn(name = "created_by")
@@ -56,5 +60,9 @@ public class FeedbackEntity {
 
     public enum Status {
         PENDING, IN_REVIEW, RESPONDED, RESOLVED
+    }
+
+    public enum Priority {
+        LOW, MEDIUM, HIGH
     }
 }
