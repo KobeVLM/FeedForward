@@ -36,14 +36,10 @@ public class AttachmentService {
     @Autowired
     private UserRepository userRepository;
     
-    @Autowired
-    private FileStorageConfig fileStorageConfig;
-    
     private final Path fileStorageLocation;
     
     @Autowired
     public AttachmentService(FileStorageConfig fileStorageConfig) {
-        this.fileStorageConfig = fileStorageConfig;
         this.fileStorageLocation = Paths.get(fileStorageConfig.getUploadDir())
                 .toAbsolutePath().normalize();
     }

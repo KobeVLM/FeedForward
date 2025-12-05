@@ -22,8 +22,8 @@ public class FeedbackController {
     }
 
     @PostMapping
-    public FeedbackEntity submitFeedback(@RequestBody FeedbackEntity feedback) {
-        return feedbackService.submitFeedback(feedback);
+    public FeedbackEntity submitFeedback(@RequestBody com.bibit.feedforward.feedforward.dto.FeedbackDTO feedbackDTO) {
+        return feedbackService.submitFeedbackFromDTO(feedbackDTO);
     }
 
     @GetMapping

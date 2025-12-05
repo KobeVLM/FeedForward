@@ -34,6 +34,68 @@ public class FeedbackService {
     public FeedbackEntity submitFeedback(FeedbackEntity feedback) {
         return feedbackRepository.save(feedback);
     }
+    
+    public FeedbackEntity submitFeedbackFromDTO(com.bibit.feedforward.feedforward.dto.FeedbackDTO feedbackDTO) {
+        // Validate required fields
+        if (feedbackDTO.getUserId() == null) {
+            throw new IllegalArgumentException("User ID is required");
+        }
+        if (feedbackDTO.getTitle() == null || feedbackDTO.getTitle().isEmpty()) {
+            throw new IllegalArgumentException("Title is required");
+        }
+        if (feedbackDTO.getDescription() == null || feedbackDTO.getDescription().isEmpty()) {
+            throw new IllegalArgumentException("Description is required");
+        }
+        
+        // Look up the user who is creating the feedback
+        var createdByUser = userRepository.findById(feedbackDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + feedbackDTO.getUserId()));
+        
+        // Look up the category
+        var category = feedbackDTO.getCategoryId() != null 
+                ? categoryRepository.findById(feedbackDTO.getCategoryId())
+                        .orElseThrow(() -> new RuntimeException("Category not found with ID: " + feedbackDTO.getCategoryId()))
+                : null;
+        
+        // Look up tags if provided
+        List<com.bibit.feedforward.feedforward.entity.TagEntity> tags = new ArrayList<>();
+        if (feedbackDTO.getTagIds() != null && !feedbackDTO.getTagIds().isEmpty()) {
+            for (Long tagId : feedbackDTO.getTagIds()) {
+                var tag = tagRepository.findById(tagId)
+                        .orElseThrow(() -> new RuntimeException("Tag not found with ID: " + tagId));
+                tags.add(tag);
+            }
+        }
+        
+        // Create the feedback entity
+        FeedbackEntity feedback = new FeedbackEntity();
+        feedback.setTitle(feedbackDTO.getTitle());
+        feedback.setDescription(feedbackDTO.getDescription());
+        feedback.setCategory(category);
+        feedback.setCreatedBy(createdByUser); // This is the critical field that was missing!
+        feedback.setTags(tags);
+        
+        // Set priority, default to MEDIUM if not provided
+        if (feedbackDTO.getPriority() != null && !feedbackDTO.getPriority().isEmpty()) {
+            try {
+                feedback.setPriority(FeedbackEntity.Priority.valueOf(feedbackDTO.getPriority().toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                feedback.setPriority(FeedbackEntity.Priority.MEDIUM);
+            }
+        } else {
+            feedback.setPriority(FeedbackEntity.Priority.MEDIUM);
+        }
+        
+        // Set initial status
+        feedback.setStatus(FeedbackEntity.Status.PENDING);
+        
+        // Set timestamps
+        feedback.setCreatedAt(LocalDateTime.now());
+        feedback.setUpdatedAt(LocalDateTime.now());
+        
+        // Save and return
+        return feedbackRepository.save(feedback);
+    }
 
     public FeedbackEntity editFeedback(UUID id, FeedbackEntity feedbackDetails) {
         FeedbackEntity feedback = getFeedbackById(id);
