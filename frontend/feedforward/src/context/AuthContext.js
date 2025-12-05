@@ -17,26 +17,19 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        // Mock Login Implementation
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                const mockUser = {
-                    userId: '123e4567-e89b-12d3-a456-426614174000',
-                    universityEmail: email,
-                    displayName: 'Mock User',
-                    role: 'Student', // Default to Student for now
-                    department: 'Computer Science'
-                };
-
-                // Simple check for demo credentials to assign roles
-                if (email.includes('admin')) mockUser.role = 'Admin';
-                if (email.includes('staff')) mockUser.role = 'Staff';
-
-                setUser(mockUser);
-                localStorage.setItem('user', JSON.stringify(mockUser));
-                resolve(mockUser);
-            }, 500); // network delay
-        });
+        try {
+            const response = await api.post('/auth/login', { email, password });
+            const userData = response.data;
+            
+            // Store user data
+            setUser(userData);
+            localStorage.setItem('user', JSON.stringify(userData));
+            
+            return userData;
+        } catch (error) {
+            console.error('Login failed:', error);
+            throw error;
+        }
     };
 
     const logout = () => {
@@ -46,7 +39,7 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (userData) => {
         try {
-            const response = await api.post('/users/register', userData);
+            const response = await api.post('/auth/register', userData);
             return response.data;
         } catch (error) {
             console.error('Registration failed:', error);

@@ -30,7 +30,12 @@ const LoginPage = () => {
             await login(email, password);
             navigate('/dashboard');
         } catch (err) {
-            setError(err.response?.data?.message || err.message || 'Failed to login. Please check your credentials.');
+            // Handle both string and object error responses
+            const errorData = err.response?.data;
+            const errorMessage = typeof errorData === 'string' 
+                ? errorData 
+                : errorData?.message || err.message || 'Failed to login. Please check your credentials.';
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }

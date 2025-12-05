@@ -69,16 +69,18 @@ const RegisterPage = () => {
         setLoading(true);
 
         try {
-            // Mock Registration
-            // await register({ ... }); 
-            // Just simulate success
-            setTimeout(() => {
-                navigate('/login');
-            }, 1000);
+            await register(formData);
+            // Registration successful, navigate to login
+            navigate('/login');
         } catch (err) {
-            setError('Failed to register. Please try again.');
+            // Handle both string and object error responses
+            const errorData = err.response?.data;
+            const errorMessage = typeof errorData === 'string' 
+                ? errorData 
+                : errorData?.message || 'Failed to register. Please try again.';
+            setError(errorMessage);
         } finally {
-            // setLoading(false); // Handled by timeout/navigation usually, but let's keep it clean
+            setLoading(false);
         }
     };
 

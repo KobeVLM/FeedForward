@@ -1,338 +1,202 @@
-# FeedForward
+# FeedForward - Feedback Management System
 
-**A Comprehensive Feedback Management System for Academic Institutions**
+A full-stack feedback management application with React frontend and Spring Boot backend.
 
-FeedForward is a platform designed to collect, categorize, and manage feedback from students and staff. The system efficiently organizes feedback into various entities and relationships to ensure smooth communication and accountability between users and departments.
+## System Architecture
 
-## 📋 Table of Contents
+- **Frontend**: React (Material UI) - `http://localhost:3000`
+- **Backend**: Spring Boot (REST API) - `http://localhost:8080`
+- **Database**: H2 (in-memory for development)
 
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Development Workflow](#development-workflow)
-- [GitHub Best Practices](#github-best-practices)
-- [Entity Relationship](#entity-relationship)
-- [API Documentation](#api-documentation)
-- [Contributing](#contributing)
-- [License](#license)
+## Prerequisites
 
-## ✨ Features
+- **Java 17+** (for backend)
+- **Maven 3.6+** (for backend)
+- **Node.js 16+** and **npm** (for frontend)
 
-### Core Functionality
+## Quick Start Guide for Teammates
 
-- **User Management**: Students, staff, and administrators with role-based access
-- **Feedback Submission**: Comprehensive feedback collection with categorization
-- **Department Routing**: Automatic assignment based on organizational structure
-- **Status Tracking**: Real-time feedback progress monitoring (Pending → InReview → Responded → Resolved)
-- **File Attachments**: Support for document and image uploads
-- **Tagging System**: Flexible labeling (Urgent, Suggestion, Complaint)
-- **Response Management**: Staff and admin communication tools
+### 1️⃣ Clone the Repository
 
-### Planned Features
+```bash
+git clone <repository-url>
+cd FeedForward
+```
 
-- Authentication and authorization system
-- Email notifications for feedback updates
-- Auto-assignment based on department rules
-- Advanced reporting and analytics
-- Mobile-responsive design
+### 2️⃣ Start Backend (Run First)
 
-## 🛠 Tech Stack
+Navigate to the backend directory and start the Spring Boot server:
 
-### Backend
+```bash
+cd backend/feedforward
+mvn spring-boot:run
+```
 
-- **Framework**: Spring Boot (Java)
-- **Dependencies**:
-  - Spring Data JPA
-  - Spring Web
-  - Spring Boot DevTools
-  - MySQL Driver
-- **Database**: MySQL
-- **Build Tool**: Maven
+✅ **Backend will run on:** `http://localhost:8080`
 
-### Frontend
+**Wait for this message:**
+```
+Started FeedforwardApplication in X.XXX seconds
+```
 
-- **Framework**: React (ES6+)
-- **UI Library**: Material UI
+### 3️⃣ Start Frontend (Run Second)
+
+Open a **new terminal**, navigate to the frontend directory, and start the React app:
+
+```bash
+cd frontend/feedforward
+npm install    # First time only
+npm start
+```
+
+✅ **Frontend will run on:** `http://localhost:3000`
+
+Your browser should automatically open to `http://localhost:3000`
+
+---
+
+## Default Ports & URLs
+
+| Service  | URL                              | Port |
+|----------|----------------------------------|------|
+| Frontend | http://localhost:3000            | 3000 |
+| Backend  | http://localhost:8080            | 8080 |
+| API Base | http://localhost:8080/api        | 8080 |
+| H2 Console | http://localhost:8080/h2-console | 8080 |
+
+---
+
+## User Roles & Testing
+
+The system has **3 user roles** pre-seeded in the database:
+
+1. **Student** - Can submit and view their own feedback
+2. **Staff** - Can review and respond to feedback
+3. **Admin** - Full system access
+
+### Test Accounts
+
+Register new users through the registration page at `http://localhost:3000/register`
+
+**Available Departments:**
+- Computer Science
+- Engineering
+- Business
+- Arts & Sciences
+
+**Available Roles:**
+- Student
+- Staff
+- Admin
+
+---
+
+## Development Notes
+
+### Backend (Spring Boot)
+
+- **Framework**: Spring Boot 3.x
+- **Database**: H2 (in-memory) - data resets on restart
+- **Data Seeding**: Automatic on startup (roles, departments, categories, tags)
+- **CORS**: Configured to allow `http://localhost:3000`
+
+### Frontend (React)
+
+- **Framework**: React 18
+- **UI Library**: Material UI (MUI)
+- **Routing**: React Router v6
 - **HTTP Client**: Axios
-- **Component Style**: Functional components with hooks
+- **State Management**: React Context API
 
-## 📁 Project Structure
+### API Endpoints
+
+**Authentication:**
+- `POST /api/auth/login` - User login
+- `POST /api/auth/register` - User registration
+
+**Resources:**
+- `GET/POST /api/users` - User management
+- `GET/POST /api/feedback` - Feedback operations
+- `GET/POST /api/categories` - Category management
+- `GET/POST /api/tags` - Tag management
+- `GET /api/departments` - Department list
+- `GET /api/roles` - Role list
+
+---
+
+## Troubleshooting
+
+### Backend Issues
+
+**Port 8080 already in use:**
+```bash
+# Find and kill the process using port 8080
+netstat -ano | findstr :8080
+taskkill /PID <process_id> /F
+```
+
+**Maven build errors:**
+```bash
+mvn clean install
+```
+
+### Frontend Issues
+
+**Port 3000 already in use:**
+- Choose a different port when prompted, or
+- Kill the process using port 3000
+
+**Dependencies not installed:**
+```bash
+cd frontend/feedforward
+npm install
+```
+
+**CORS errors:**
+- Ensure backend is running first
+- Check that backend URL in frontend matches: `http://localhost:8080/api`
+
+---
+
+## Project Structure
 
 ```
 FeedForward/
-├── backend/feedforward/          # Spring Boot application
-│   ├── src/main/java/com/bibit/feedforward/feedforward/
-│   │   ├── entity/              # JPA entities
-│   │   ├── repository/          # Data access layer
-│   │   ├── service/             # Business logic
-│   │   └── controller/          # REST API endpoints
-│   ├── src/main/resources/
-│   │   └── application.properties
-│   └── pom.xml
-├── frontend/feedforward/         # React application
-│   ├── src/
-│   │   ├── components/          # Reusable UI components
-│   │   ├── pages/              # Page components
-│   │   ├── services/           # API service calls
-│   │   └── assets/             # Static assets
-│   ├── public/
-│   └── package.json
-├── docs/                        # Documentation
-├── .github/
-│   └── .copilot-instructions.md
-└── README.md
+├── backend/
+│   └── feedforward/
+│       ├── src/main/java/.../
+│       │   ├── controller/     # REST API endpoints
+│       │   ├── service/        # Business logic
+│       │   ├── repository/     # Database access
+│       │   ├── entity/         # Database models
+│       │   └── dto/            # Data transfer objects
+│       └── pom.xml
+│
+└── frontend/
+    └── feedforward/
+        ├── src/
+        │   ├── components/     # Reusable UI components
+        │   ├── pages/          # Page components
+        │   ├── context/        # React Context (Auth)
+        │   ├── api/            # Axios configuration
+        │   └── utils/          # Constants and helpers
+        └── package.json
 ```
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Java 17 or higher
-- MySQL 8.0 or higher
-- Maven 3.6 or higher
-
-### Backend Setup
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/KobeVLM/FeedForward.git
-   cd FeedForward/backend/feedforward
-   ```
-
-2. **Configure database**
-
-   ```properties
-   # Update src/main/resources/application.properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/feedforward_db
-   spring.datasource.username=your_username
-   spring.datasource.password=your_password
-   ```
-
-3. **Run the application**
-   ```bash
-   ./mvnw spring-boot:run
-   ```
-
-### Frontend Setup
-
-1. **Navigate to frontend directory**
-
-   ```bash
-   cd frontend/feedforward
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-3. **Start development server**
-   ```bash
-   npm start
-   ```
-
-The application will be available at:
-
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8080/api/v1
-
-## 🔄 Development Workflow
-
-### Branch Strategy
-
-- **main**: Stable, production-ready code
-- **feature/[feature-name]**: New feature development
-- **fix/[bug-description]**: Bug fixes
-- **docs/[doc-update]**: Documentation updates
-
-### Example Branch Names
-
-```bash
-feature/login-ui
-feature/feedback-api
-feature/user-management
-fix/login-bug
-fix/validation-error
-docs/api-documentation
-```
-
-### Development Process
-
-1. **Create feature branch**
-
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-2. **Develop and test locally**
-
-   ```bash
-   # Make your changes
-   git add .
-   git commit -m "feat(backend): add feedback submission endpoint"
-   ```
-
-3. **Pull latest main before merging**
-
-   ```bash
-   git checkout main
-   git pull origin main
-   git checkout feature/your-feature-name
-   git rebase main
-   ```
-
-4. **Push and create pull request**
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-
-## 📋 GitHub Best Practices
-
-### Commit Message Format
-
-Follow conventional commit format:
-
-```
-<type>(<scope>): <description>
-
-Examples:
-feat(backend): add user authentication
-fix(frontend): resolve Material UI styling issue
-docs: update API documentation
-style(ui): improve feedback form layout
-refactor(entity): rename database fields
-```
-
-### Pull Request Guidelines
-
-- Write clear, descriptive PR titles
-- Include summary of changes in PR description
-- Test all changes locally before submitting
-- Request code review from team members
-- Ensure all CI checks pass
-- Delete branch after successful merge
-
-### File Naming Conventions
-
-#### Backend (Java)
-
-```
-EntityName + Layer + .java
-Examples:
-- UserEntity.java
-- FeedbackRepository.java
-- FeedbackService.java
-- UserController.java
-```
-
-#### Frontend (React)
-
-```
-PascalCase for components: LoginPage.jsx
-lowercase for folders: components/, pages/, services/
-```
-
-## 🗃 Entity Relationship
-
-### Core Entities
-
-- **User**: System users (students, staff, administrators)
-- **Role**: Access permissions (Student, Staff, Admin)
-- **Department**: Organizational units
-- **Feedback**: Central feedback entity with status tracking
-- **Category**: Feedback classification (Facilities, Academics, Services)
-- **Tag**: Flexible labeling system
-- **Response**: Staff/admin replies to feedback
-- **Attachment**: File uploads related to feedback
-
-### Key Relationships
-
-- User ↔ Role (many-to-one)
-- User ↔ Department (many-to-one)
-- Feedback ↔ User (many-to-one for creator)
-- Feedback ↔ Category (many-to-one)
-- Feedback ↔ Tag (many-to-many)
-- Feedback ↔ Response (one-to-many)
-- Feedback ↔ Attachment (one-to-many)
-
-## 📚 API Documentation
-
-### Base URL
-
-```
-http://localhost:8080/api/v1
-```
-
-### Response Format
-
-```json
-{
-  "success": true,
-  "data": {
-    /* response data */
-  },
-  "message": "Operation completed successfully"
-}
-```
-
-### Example Endpoints
-
-```bash
-GET    /api/v1/feedbacks          # Get all feedback
-POST   /api/v1/feedbacks          # Create new feedback
-GET    /api/v1/feedbacks/{id}     # Get specific feedback
-PUT    /api/v1/feedbacks/{id}     # Update feedback
-DELETE /api/v1/feedbacks/{id}     # Delete feedback
-
-GET    /api/v1/users              # Get all users
-POST   /api/v1/users              # Create new user
-GET    /api/v1/categories         # Get all categories
-POST   /api/v1/responses          # Add response to feedback
-```
-
-## 🤝 Contributing
-
-### Code Style Guidelines
-
-- **Java**: Follow standard Java naming conventions
-- **JavaScript**: Use ES6+ features, camelCase for variables, PascalCase for components
-- **Indentation**: 2 spaces for JavaScript, 4 spaces for Java
-- **Comments**: Document complex business logic and public methods
-
-### Testing
-
-- Write unit tests for service layer methods
-- Test API endpoints with integration tests
-- Ensure frontend components render correctly
-
-### Documentation
-
-- Update README for new features
-- Document API changes
-- Include inline comments for complex logic
-- Update Copilot instructions when adding new patterns
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🎯 Project Status
+## Important Notes
 
-**Current Phase**: Development
+⚠️ **Dev Mode Authentication**: Currently using simple authentication without JWT tokens or password hashing. **DO NOT use in production!**
 
-- ✅ Project structure setup
-- ✅ Entity design completion
-- 🔄 Backend API development
-- 🔄 Frontend UI implementation
-- ⏳ Authentication system
-- ⏳ Testing implementation
-- ⏳ Deployment configuration
+⚠️ **Database**: H2 in-memory database means all data is lost when backend restarts. For persistence, configure a different database in `application.properties`.
 
 ---
 
-**Developed with ❤️ by the FeedForward Team**
+## Need Help?
+
+- Check if both backend and frontend are running
+- Verify ports are not blocked by firewall
+- Check browser console for frontend errors
+- Check terminal/console for backend errors
+- Ensure you're accessing `http://localhost:3000` (not a different URL)
