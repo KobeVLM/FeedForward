@@ -44,8 +44,25 @@ public class UserService {
         user.setDisplayName(userDetails.getDisplayName());
         user.setUniversityEmail(userDetails.getUniversityEmail());
         user.setPasswordHash(userDetails.getPasswordHash());
-        user.setRole(userDetails.getRole());
-        user.setDepartment(userDetails.getDepartment());
+        
+        // Handle role: if it has a roleId, fetch the complete role entity from DB
+        if (userDetails.getRole() != null && userDetails.getRole().getRoleId() != null) {
+            RoleEntity role = roleRepository.findById(userDetails.getRole().getRoleId())
+                    .orElseThrow(() -> new RuntimeException("Role not found"));
+            user.setRole(role);
+        } else if (userDetails.getRole() != null) {
+            user.setRole(userDetails.getRole());
+        }
+        
+        // Handle department: if it has a departmentId, fetch the complete department entity from DB
+        if (userDetails.getDepartment() != null && userDetails.getDepartment().getDepartmentId() != null) {
+            DepartmentEntity department = departmentRepository.findById(userDetails.getDepartment().getDepartmentId())
+                    .orElseThrow(() -> new RuntimeException("Department not found"));
+            user.setDepartment(department);
+        } else if (userDetails.getDepartment() != null) {
+            user.setDepartment(userDetails.getDepartment());
+        }
+        
         return userRepository.save(user);
     }
 
@@ -98,5 +115,22 @@ public class UserService {
         response.setMessage("Registration successful");
 
         return response;
+    }
+
+    public void changePassword(UUID userId, String currentPassword, String newPassword) {
+        UserEntity user = getUserById(userId);
+        
+        if (currentPassword == null || newPassword == null) {
+            throw new RuntimeException("Current password and new password are required");
+        }
+        
+        // In production, you would verify the current password with a proper hashing algorithm
+        // For now, doing a simple comparison (NOT SECURE - for dev only)
+        if (!user.getPasswordHash().equals(currentPassword)) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+        
+        user.setPasswordHash(newPassword);
+        userRepository.save(user);
     }
 }

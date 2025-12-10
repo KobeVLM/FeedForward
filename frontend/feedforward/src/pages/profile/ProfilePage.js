@@ -90,14 +90,14 @@ const ProfilePage = () => {
 
     return (
         <Box>
-            <Typography variant="h4" sx={{ mb: 4, fontWeight: 600 }}>
+            <Typography variant="h4" sx={{ mb: 4, fontWeight: 1000 }}>
                 My Profile
             </Typography>
 
             <Grid container spacing={3}>
                 {/* Profile Card */}
                 <Grid item xs={12} md={4}>
-                    <Paper sx={{ p: 3, textAlign: 'center', position: 'relative' }}>
+                    <Paper sx={{ p: 3, textAlign: 'center', position: 'relative', height: '655px' }}>
                         <Box sx={{
                             position: 'absolute', top: 0, left: 0, right: 0, height: 80,
                             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -168,13 +168,13 @@ const ProfilePage = () => {
 
                 {/* Stats & Activity */}
                 <Grid item xs={12} md={8}>
-                    <Paper sx={{ p: 3, mb: 3 }}>
+                    <Paper sx={{ p: 3, mb: 3, width: '1100px' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-                            <Typography variant="h6" fontWeight="bold">Feedback Statistics</Typography>
+                            <Typography variant="h6" fontWeight="bold" sx={{ fontSize: '2.0rem' }}>Feedback Statistics</Typography>
                             <AssessmentIcon color="primary" />
                         </Box>
 
-                        <Grid container spacing={2}>
+                        <Grid container spacing={9}>
                             <Grid item xs={6} sm={3}>
                                 <Typography variant="h4" color="primary" fontWeight="bold">{stats.total}</Typography>
                                 <Typography variant="body2" color="text.secondary">Total</Typography>

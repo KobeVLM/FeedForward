@@ -132,10 +132,10 @@ const DashboardPage = () => {
             </Grid>
 
             <Grid container spacing={3}>
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12} md={3}>
                     <RecentActivity activities={recentActivity} />
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} md={9} sx={{ display: 'flex' }}>
                     <StatusOverview data={pieData} />
                 </Grid>
             </Grid>

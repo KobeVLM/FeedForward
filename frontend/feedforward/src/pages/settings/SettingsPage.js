@@ -28,17 +28,21 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { authAPI } from '../../api/auth';
 import { userAPI } from '../../api/user';
+import client from '../../api/client';
 
 const SettingsPage = () => {
-    const { user, logout } = useAuth();
+    const { user, logout, setUser } = useAuth();
 
     // Appearance
-    const [theme, setTheme] = useState('light');
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+    const [themeSuccess, setThemeSuccess] = useState('');
 
     // Department
     const [departments, setDepartments] = useState([]);
     const [department, setDepartment] = useState(user?.department?.name || user?.department || '');
     const [loadingDepts, setLoadingDepts] = useState(false);
+    const [deptSuccess, setDeptSuccess] = useState('');
+    const [deptError, setDeptError] = useState('');
 
     // Password
     const [currentPassword, setCurrentPassword] = useState('');
@@ -69,10 +73,60 @@ const SettingsPage = () => {
     };
 
     const handleUpdateDepartment = async () => {
-        // In a real app, we would call userAPI.updateProfile
-        // For now, let's just simulate or log it as the backend might not have a direct endpoint for just department
-        console.log('Updating department to:', department);
-        alert('Department update feature coming soon!');
+        setDeptError('');
+        setDeptSuccess('');
+        setLoadingDepts(true);
+
+        try {
+            // Find the department object that matches the selected name
+            const selectedDept = departments.find(d => d.name === department);
+            
+            if (!selectedDept) {
+                setDeptError('Invalid department selected');
+                setLoadingDepts(false);
+                return;
+            }
+            
+            // Send complete user object with all required fields
+            // Role must be sent as object with roleId to avoid deserialization errors
+            const roleObj = user.role && typeof user.role === 'object' 
+                ? user.role 
+                : { roleId: user.roleId || 1 }; // Default to roleId 1 if not available
+                
+            const response = await client.put(`/users/${user.userId || user.id}`, {
+                userId: user.userId || user.id,
+                displayName: user.displayName || user.name,
+                universityEmail: user.universityEmail || user.email,
+                passwordHash: user.passwordHash || '',
+                role: roleObj,
+                department: {
+                    departmentId: selectedDept.departmentId || selectedDept.id
+                },
+                avatarUrl: user.avatarUrl || null
+            });
+            
+            setLoadingDepts(false);
+            setDeptSuccess('Department updated successfully');
+            // Update user context and localStorage
+            const updatedUser = { ...user, department: selectedDept };
+            setUser(updatedUser);
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+            // Clear success message after 3 seconds
+            setTimeout(() => setDeptSuccess(''), 3000);
+        } catch (error) {
+            console.error('Failed to update department:', error);
+            setLoadingDepts(false);
+            setDeptError(error.response?.data?.message || 'Failed to update department');
+        }
+    };
+
+    const handleThemeChange = (newTheme) => {
+        setTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+        setThemeSuccess('Theme updated successfully');
+        // Apply theme globally
+        document.documentElement.setAttribute('data-theme', newTheme);
+        setTimeout(() => setThemeSuccess(''), 3000);
     };
 
     const handleChangePassword = async () => {
@@ -146,12 +200,13 @@ const SettingsPage = () => {
                     <Select
                         value={theme}
                         label="Theme"
-                        onChange={(e) => setTheme(e.target.value)}
+                        onChange={(e) => handleThemeChange(e.target.value)}
                     >
                         <MenuItem value="light">Light</MenuItem>
                         <MenuItem value="dark">Dark</MenuItem>
                     </Select>
                 </FormControl>
+                {themeSuccess && <Alert severity="success" sx={{ mt: 2 }}>{themeSuccess}</Alert>}
             </Paper>
 
             {/* Department */}
@@ -177,8 +232,10 @@ const SettingsPage = () => {
                         ))}
                     </Select>
                 </FormControl>
-                <Button variant="contained" onClick={handleUpdateDepartment}>
-                    Update Department
+                {deptError && <Alert severity="error" sx={{ mb: 2 }}>{deptError}</Alert>}
+                {deptSuccess && <Alert severity="success" sx={{ mb: 2 }}>{deptSuccess}</Alert>}
+                <Button variant="contained" onClick={handleUpdateDepartment} disabled={loadingDepts}>
+                    {loadingDepts ? 'Updating...' : 'Update Department'}
                 </Button>
             </Paper>
 

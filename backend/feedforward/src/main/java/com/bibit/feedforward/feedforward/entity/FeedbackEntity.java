@@ -57,6 +57,7 @@ public class FeedbackEntity {
     private LocalDateTime updatedAt;
     private LocalDateTime reviewedAt;
     private LocalDateTime resolvedAt;
+    private Boolean isRejected = false;
 
     public UUID getFeedbackId() {
         return feedbackId;
@@ -168,6 +169,14 @@ public class FeedbackEntity {
 
     public void setResolvedAt(LocalDateTime resolvedAt) {
         this.resolvedAt = resolvedAt;
+    }
+
+    public Boolean getIsRejected() {
+        return isRejected;
+    }
+
+    public void setIsRejected(Boolean isRejected) {
+        this.isRejected = isRejected;
     }
 
     public enum Status {

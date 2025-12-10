@@ -25,7 +25,7 @@ const RecentActivity = ({ activities }) => {
     const navigate = useNavigate();
 
     return (
-        <Paper sx={{ p: 3, height: '100%' }}>
+        <Paper sx={{ p: 3, height: '100%', width: '620px' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
                 <Typography variant="h6" fontWeight="bold">
                     Recent Activity

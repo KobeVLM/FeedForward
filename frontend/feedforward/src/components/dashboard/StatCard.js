@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, Box, Avatar, Typography } from '@mui/material';
 
 const StatCard = ({ title, value, icon, color, subtitle }) => (
-    <Card sx={{ height: '100%', position: 'relative', overflow: 'hidden' }}>
+    <Card sx={{ height: '100%', position: 'relative', overflow: 'hidden', width: '300px' }}>
         <Box
             sx={{
                 position: 'absolute',

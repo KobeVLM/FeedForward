@@ -4,11 +4,11 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, L
 
 const StatusOverview = ({ data }) => {
     return (
-        <Paper sx={{ p: 3, height: '100%' }}>
+        <Paper sx={{ p: 3, height: '100%', minHeight: 400, width: '100%' }}>
             <Typography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
                 Status Overview
             </Typography>
-            <Box sx={{ height: 300, display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{ height: 350, display: 'flex', justifyContent: 'center', width: '580px' }}>
                 {data.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
@@ -16,9 +16,9 @@ const StatusOverview = ({ data }) => {
                                 data={data}
                                 cx="50%"
                                 cy="50%"
-                                innerRadius={60}
-                                outerRadius={80}
-                                paddingAngle={5}
+                                innerRadius={80}
+                                outerRadius={140}
+                                paddingAngle={2}
                                 dataKey="value"
                             >
                                 {data.map((entry, index) => (
@@ -26,7 +26,11 @@ const StatusOverview = ({ data }) => {
                                 ))}
                             </Pie>
                             <RechartsTooltip />
-                            <Legend verticalAlign="bottom" height={36} />
+                            <Legend 
+                                verticalAlign="bottom" 
+                                height={50} 
+                                wrapperStyle={{ paddingTop: '20px' }} 
+                            />
                         </PieChart>
                     </ResponsiveContainer>
                 ) : (
